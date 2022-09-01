@@ -27,7 +27,7 @@ func (calc *Calculator) step() {
 	case SUB:
 		x := calc.stack.pop()
 		y := calc.stack.pop()
-		calc.stack.push(x - y)
+		calc.stack.push(y - x)
 
 	case MUL:
 		x := calc.stack.pop()
@@ -37,7 +37,7 @@ func (calc *Calculator) step() {
 	case DIV:
 		x := calc.stack.pop()
 		y := calc.stack.pop()
-		calc.stack.push(x / y)
+		calc.stack.push(y / x)
 
 	case VALUE:
 		calc.stack.push(item.value)
