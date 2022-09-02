@@ -1,55 +1,54 @@
 package main
 
 type Calculator struct {
-	expr        []Item
-	exprPointer int
-	stack       Stack
+	expr         []Item
+	expr_pointer int
+	stack        Stack
 }
 
 func New_Calculator(expr []Item, stack *Stack) *Calculator {
 	calc := new(Calculator)
-	calc.exprPointer = 0
+	calc.expr_pointer = 0
 	calc.expr = expr
 	calc.stack = *stack
 	return calc
 }
 
-func (calc *Calculator) step() {
-	item := calc.expr[calc.exprPointer]
+	item := calc.expr[calc.expr_pointer]
 
 	switch item.item_type {
 
 	case ADD:
-		x := calc.stack.pop()
-		y := calc.stack.pop()
-		calc.stack.push(x + y)
+		x := calc.stack.Pop()
+		y := calc.stack.Pop()
+		calc.stack.Push(x + y)
 
 	case SUB:
-		x := calc.stack.pop()
-		y := calc.stack.pop()
-		calc.stack.push(y - x)
+		x := calc.stack.Pop()
+		y := calc.stack.Pop()
+		calc.stack.Push(y - x)
 
 	case MUL:
-		x := calc.stack.pop()
-		y := calc.stack.pop()
-		calc.stack.push(x * y)
+		x := calc.stack.Pop()
+		y := calc.stack.Pop()
+		calc.stack.Push(x * y)
 
 	case DIV:
-		x := calc.stack.pop()
-		y := calc.stack.pop()
-		calc.stack.push(y / x)
+		x := calc.stack.Pop()
+		y := calc.stack.Pop()
+		calc.stack.Push(y / x)
 
 	case VALUE:
-		calc.stack.push(item.value)
+		calc.stack.Push(item.value)
 	}
 
-	calc.exprPointer++
+	calc.expr_pointer++
 
 }
 
-func (c *Calculator) run() int {
-	for c.exprPointer < len(c.expr) {
-		c.step()
+func (c *Calculator) Run() int {
+	for c.expr_pointer < len(c.expr) {
+		c.Step()
 	}
-	return c.stack.pop()
+	return c.stack.Pop()
 }

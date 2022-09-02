@@ -15,26 +15,57 @@ func New_Stack(size int, dynamic bool) Stack {
 	return Stack{0, make([]int, size), size, dynamic}
 }
 
-func (s *Stack) push(value int) {
+func (s *Stack) Push(value int) {
 
-	if s.pointer < len(s.stack)-1 {
-		s.pointer++
-		s.stack[s.pointer] = value
-	} else {
-		fmt.Println("Stack full(overflow).")
+	if s.pointer >= len(s.stack) {
+		if s.dynamic {
+			s.Expand_Stack()
+		} else {
+			fmt.Println("Stack full(overflow)")
+			return
+		}
 	}
+
+	s.stack[s.pointer] = value
+	s.pointer++
+	fmt.Println("Stack pointer: ", s.pointer, ", stack length: ", len(s.stack), ", value: ", value)
 }
-func (s *Stack) pop() int {
+func (s *Stack) Pop() int {
 
 	value := 0
 
-	if s.pointer < 0 {
+	if s.pointer == 0 {
 		fmt.Println("Stack is empty.")
-	} else {
-		value = s.stack[s.pointer]
-		s.pointer--
+		return 0
 	}
 
+	if s.dynamic {
+		if s.pointer < s.size-10 {
+			s.Shrink_Stack()
+		}
+	}
+	s.pointer--
+	value = s.stack[s.pointer]
+
 	return value
+
+}
+func (s *Stack) Shrink_Stack() {
+	old_stack := s.stack
+	s.stack = make([]int, len(s.stack)/2)
+
+	for i := 0; i < s.pointer; i++ {
+		s.stack[i] = old_stack[i]
+	}
+
+}
+
+func (s *Stack) Expand_Stack() {
+	old_stack := s.stack
+	s.stack = make([]int, len(s.stack)*2)
+
+	for i := 0; i < s.pointer; i++ {
+		s.stack[i] = old_stack[i]
+	}
 
 }
