@@ -42,3 +42,7 @@ func test_dynamic_calc_overflow() {
 	fmt.Println("", calc.Run())
 	fmt.Println("")
 }
+
+func static_large_test() {
+
+}
