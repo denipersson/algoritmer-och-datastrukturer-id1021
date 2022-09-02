@@ -8,6 +8,7 @@ const (
 	MUL
 	DIV
 	VALUE
+	MOD
 )
 
 type Item struct {

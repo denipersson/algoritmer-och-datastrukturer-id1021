@@ -28,7 +28,7 @@ func (s *Stack) Push(value int) {
 
 	s.stack[s.pointer] = value
 	s.pointer++
-	fmt.Println("Stack pointer: ", s.pointer, ", stack length: ", len(s.stack), ", value: ", value)
+
 }
 func (s *Stack) Pop() int {
 
@@ -40,7 +40,7 @@ func (s *Stack) Pop() int {
 	}
 
 	if s.dynamic {
-		if s.pointer < s.size-10 {
+		if s.pointer < s.size-500 {
 			s.Shrink_Stack()
 		}
 	}
@@ -52,7 +52,7 @@ func (s *Stack) Pop() int {
 }
 func (s *Stack) Shrink_Stack() {
 	old_stack := s.stack
-	s.stack = make([]int, len(s.stack)/2)
+	s.stack = make([]int, len(s.stack)-500)
 
 	for i := 0; i < s.pointer; i++ {
 		s.stack[i] = old_stack[i]
@@ -62,7 +62,7 @@ func (s *Stack) Shrink_Stack() {
 
 func (s *Stack) Expand_Stack() {
 	old_stack := s.stack
-	s.stack = make([]int, len(s.stack)*2)
+	s.stack = make([]int, len(s.stack)+500)
 
 	for i := 0; i < s.pointer; i++ {
 		s.stack[i] = old_stack[i]
