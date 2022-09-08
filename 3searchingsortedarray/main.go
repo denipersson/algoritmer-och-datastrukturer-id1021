@@ -9,7 +9,17 @@ import (
 
 func main() {
 	//rand.Seed(time.Now().UnixMicro())
-	test()
+	//test()
+
+	total_duplicates := 0
+	for i := 1; i <= 300; i++ {
+		total_duplicates += test_find_rewritten_duplicates(i)
+		//total_duplicates += test_find_duplicates(i)
+		//if time.Since(time_1_min).Seconds() > 60 {
+		//	break
+		//}
+	}
+
 }
 
 func test() {
@@ -107,6 +117,17 @@ func sorted_slice(size int) ([]int, int) {
 	return slice, key
 }
 
+func sorted_slice_no_key(size int) []int {
+
+	slice := make([]int, size)
+	nxt := 0
+	for i := 0; i < size; i++ {
+		nxt += rand.Intn(10) + 1
+		slice[i] = nxt
+	}
+	return slice
+}
+
 func search_sorted(slice []int, key int) bool {
 
 	increment := len(slice) / 10
@@ -153,3 +174,107 @@ func binary_search(slice []int, key int) bool {
 	return false
 
 }
+
+func test_find_duplicates(mult int) int {
+	//t0 := time.Now()
+	duplicates := search_duplicates(10*mult, 100)
+	//t_after := time.Since(t0).Nanoseconds() / 100
+
+	//fmt.Printf("%d %d\n", mult*10, t_after)
+	return duplicates
+}
+func test_find_rewritten_duplicates(mult int) int {
+	t0 := time.Now()
+	duplicates := rewritten_search_duplicates(10*mult, 1000)
+	t_after := time.Since(t0).Nanoseconds() / 1000
+
+	fmt.Printf("%d %d\n", mult*10, t_after)
+
+	return duplicates
+}
+
+func search_duplicates(size int, k int) int {
+
+	keys := sorted_slice_no_key(size)
+	values := make([]int, size)
+	copy(keys, values)
+	duplicates := 0
+	rand.Seed(time.Now().UTC().UnixNano())
+	t0 := time.Now()
+	var t_after int64
+	for j := 0; j < k; j++ {
+
+		for ki := 0; ki < size; ki++ {
+			key := keys[ki]
+
+			if binary_search(values, key) {
+				duplicates++
+
+				t_after += int64(time.Since(t0).Milliseconds())
+			}
+			t_after += int64(time.Since(t0).Milliseconds())
+		}
+	}
+	fmt.Println(size, " ", t_after/int64(k))
+	return duplicates
+
+}
+
+func rewritten_search_duplicates(size int, k int) int {
+
+	keys := sorted_slice_no_key(size)
+	values := sorted_slice_no_key(size)
+	rand.Seed(time.Now().UTC().UnixNano())
+	var t_after int64
+
+	ki := 0
+	vi := 0
+	duplicates := 0
+
+	t0 := time.Now()
+
+	for ki < len(keys) && vi < len(values) {
+		if keys[ki] == values[vi] {
+			ki++
+			duplicates++
+			t_after += int64(time.Since(t0).Milliseconds())
+
+			continue
+		} else if keys[ki] < values[vi] {
+			ki++
+			t_after += int64(time.Since(t0).Milliseconds())
+
+			continue
+		} else {
+			t_after += int64(time.Since(t0).Milliseconds())
+
+			vi++
+		}
+	}
+
+	//fmt.Println(size, " ", t_after/int64(k))
+	return duplicates / k
+
+}
+
+/*
+
+'int array1_index = 0;
+int array2_index = 0;
+int antal_hittade = 0;
+while(array1_index < array1.length){
+    if(array1[array1_index] == array2[array2_index]){
+        array1_index++;
+        antal_hittade++;
+        continue;
+        }
+
+    else if(array1[array1_index] < array2[array2_index]){
+        array1_index++;
+        continue;
+        }
+
+    array2_index++
+    }'
+
+*/
