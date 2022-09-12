@@ -11,13 +11,22 @@ func main() {
 	//rand.Seed(time.Now().UnixMicro())
 	//test()
 
-	total_duplicates := 0
-	for i := 1; i <= 300; i++ {
-		total_duplicates += test_find_rewritten_duplicates(i)
+	//total_duplicates := 0
+	for i := 1; i <= 1000; i++ {
+		//total_duplicates += test_find_rewritten_duplicates(i)
 		//total_duplicates += test_find_duplicates(i)
 		//if time.Since(time_1_min).Seconds() > 60 {
 		//	break
 		//}
+		var t_after int64
+		t0 := time.Now()
+
+		for k := 0; k < 30; k++ {
+			search_unsorted(sorted_slice(i * 10))
+			t_after += int64(time.Since(t0).Nanoseconds())
+		}
+		fmt.Println(i*10, t_after/30)
+
 	}
 
 }
@@ -128,21 +137,9 @@ func sorted_slice_no_key(size int) []int {
 	return slice
 }
 
-func search_sorted(slice []int, key int) bool {
-
-	increment := len(slice) / 10
-
-	if increment < 1 {
-		increment = 1
-	}
-
-	for i := 0; i < len(slice); i += increment {
-		if slice[i] > key {
-			i -= increment
-			increment = 1
-		}
-
-		if slice[i] == key {
+func search_sorted(array []int, key int) bool {
+	for i := 0; array[i] <= key; i++ {
+		if array[i] == key {
 			return true
 		}
 	}
