@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 	"time"
 )
@@ -18,16 +17,18 @@ func main() {
 		//if time.Since(time_1_min).Seconds() > 60 {
 		//	break
 		//}
-		var t_after int64
-		t0 := time.Now()
+		/*
+			var t_after int64
+			t0 := time.Now()
 
-		for k := 0; k < 30; k++ {
-			search_unsorted(sorted_slice(i * 10))
-			t_after += int64(time.Since(t0).Nanoseconds())
-		}
-		fmt.Println(i*10, t_after/30)
-
+			for k := 0; k < 30; k++ {
+				search_unsorted(sorted_slice(i * 10))
+				t_after += int64(time.Since(t0).Nanoseconds())
+			}
+			fmt.Println(i*10, t_after/30)
+		*/
 	}
+	test()
 
 }
 
@@ -41,27 +42,26 @@ func test() {
 		key        int
 		slice      []int
 		t0         time.Time
-		t1         float64
-		bin        float64
-		loops      int = 10
+		bin        int
+		loops      int = 100
 	)
 	fmt.Println("UNSORTED:")
-	for mult := 0; slice_size < 64000000; mult++ {
+	for mult := 1; mult <= 10000; mult += 250 {
 
-		slice_size = int(math.Pow(2, float64(mult)))
+		slice_size = 10 * mult
 		bin = 0
 		fmt.Printf("%d ", slice_size)
+		t0 = time.Now()
 		for i := 0; i < loops; i++ {
 
 			slice, key = sorted_slice(slice_size)
-			t0 = time.Now()
+
 			if binary_search(slice, key) {
-				t1 = float64(time.Since(t0))
-				bin += t1
+				bin += int(time.Since(t0).Nanoseconds())
 
 			}
 		}
-		fmt.Printf("%f\n", bin/float64(loops)/1000)
+		fmt.Printf("%d\n", bin/loops)
 	}
 	/*
 		fmt.Println("SORTED:")
@@ -87,7 +87,6 @@ func test() {
 
 		fmt.Println(slice_size, " ", bin/float64(loop_size))
 	*/
-
 }
 
 func search_unsorted(array []int, key int) bool {
