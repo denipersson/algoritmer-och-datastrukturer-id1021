@@ -7,20 +7,58 @@ import (
 )
 
 func main() {
-	test_quick_sort()
+	for i := 1; i <= 10000001; i += 100000 {
+		vals := rand.Perm(i)
+
+		test_quick_sort(1*i, vals)
+
+	}
+
+	/*
+	   t := create_random_linked_list(10)
+	   fmt.Println(t.String())
+	   t.swap_nodes(t.start, t.end)
+	   fmt.Println(t.String())
+	   t.swap_nodes(t.start.next, t.end.prev)
+	   fmt.Println(t.String())
+	*/
 }
 
-func test_quick_sort() {
-	arr := create_random_array(20)
-	fmt.Println("FIRST:\n", arr)
+func test_quick_sort(size int, vals []int) {
+	arr := create_random_array(size, vals)
+	t0 := time.Now()
 	quick_sort(&arr, 0, len(arr)-1)
-	fmt.Println(arr)
+	t_since := time.Since(t0).Nanoseconds()
+
+	fmt.Println(t_since, size)
+
+	//fmt.Println(size*10, " ", t_since.Nanoseconds()/10)
+}
+func test_quick_sort_LL(size int, vals []int) {
+	ll := create_random_linked_list(size, vals)
+	t0 := time.Now()
+	ll.quick_sort_LL(ll.start, ll.end)
+	t_since := time.Since(t0).Nanoseconds()
+
+	fmt.Println(t_since, size)
+	//fmt.Println(size*10, " ", t_since.Nanoseconds()/10)
 }
 
-func create_random_array(size int) []int {
+func create_random_array(size int, vals []int) []int {
 	rand.Seed(time.Now().Unix())
-	arr := rand.Perm(size)
+	arr := vals
 	return arr
+}
+func create_random_linked_list(size int, vals []int) LinkedList {
+
+	list := new_doubly_linked_list(vals[0])
+
+	for i := 1; i < size; i++ {
+		list.append(&Node{vals[i], nil, nil})
+	}
+
+	return list
+
 }
 
 func quick_sort(array *[]int, start int, end int) {
@@ -37,7 +75,6 @@ func partition(array *[]int, start int, end int) int {
 	pivot := (*array)[end]
 
 	for left_i < right_i {
-		fmt.Println(*array, ", pivot: ", (*array)[end])
 		for (*array)[left_i] < pivot && left_i < end {
 			left_i++
 		}
@@ -45,9 +82,7 @@ func partition(array *[]int, start int, end int) int {
 			right_i--
 		}
 		if left_i < right_i {
-			fmt.Println((*array)[left_i], "<- left  right ->", (*array)[right_i])
 			swap(array, left_i, right_i)
-
 		} else {
 			swap(array, left_i, end)
 		}
