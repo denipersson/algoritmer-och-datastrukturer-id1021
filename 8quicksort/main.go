@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"time"
 )
 
 func main() {
 	for i := 1; i <= 10000001; i += 100000 {
-		vals := rand.Perm(i)
+		vals := rand.Perm(i*int(math.Log(float64(i))) + 1)
 
 		test_quick_sort(1*i, vals)
 
@@ -30,7 +31,7 @@ func test_quick_sort(size int, vals []int) {
 	quick_sort(&arr, 0, len(arr)-1)
 	t_since := time.Since(t0).Nanoseconds()
 
-	fmt.Println(t_since, size)
+	fmt.Println(size, t_since)
 
 	//fmt.Println(size*10, " ", t_since.Nanoseconds()/10)
 }
@@ -40,7 +41,7 @@ func test_quick_sort_LL(size int, vals []int) {
 	ll.quick_sort_LL(ll.start, ll.end)
 	t_since := time.Since(t0).Nanoseconds()
 
-	fmt.Println(t_since, size)
+	fmt.Println(size, t_since)
 	//fmt.Println(size*10, " ", t_since.Nanoseconds()/10)
 }
 
