@@ -13,11 +13,11 @@ type Heap struct {
 	root *Node
 }
 
-func (heap *Heap) add(priority int) {
+func (heap *Heap) add(priority int) int {
 	new_node := Node{priority, nil, nil, 0}
 	if heap.root == nil {
 		heap.root = &new_node
-		return
+		return 1
 	}
 	if heap.root.priority > priority {
 		temp := heap.root.priority
@@ -26,7 +26,8 @@ func (heap *Heap) add(priority int) {
 	}
 	steps := 0
 	heap.root.add_down(&new_node, &steps)
-	fmt.Println(new_node.priority, " added in steps: ", steps)
+	return steps
+	//fmt.Println(new_node.priority, " added in steps: ", steps)
 }
 func (node *Node) add_down(new_node *Node, steps *int) *int {
 	node.size += new_node.size + 1
@@ -52,7 +53,7 @@ func (node *Node) add_down(new_node *Node, steps *int) *int {
 	target.add_down(new_node, steps)
 	return steps
 }
-func (heap *Heap) push(increment int) {
+func (heap *Heap) push(increment int) int {
 	heap.root.priority += increment
 	steps := 0
 	var target *Node
@@ -69,7 +70,7 @@ func (heap *Heap) push(increment int) {
 	}
 	if target == nil {
 		steps++
-		return
+		return steps
 	}
 	if target.priority < heap.root.priority {
 		temp := target.priority
@@ -77,6 +78,7 @@ func (heap *Heap) push(increment int) {
 		heap.root.priority = temp
 	}
 	target.push_down(&steps)
+	return steps
 }
 func (node *Node) push_down(steps *int) *int {
 	*steps++
@@ -125,7 +127,6 @@ func (heap *Heap) remove() *Node {
 		new_root = heap.root.right
 		branch_to_fix = heap.root.left
 	}
-
 	heap.root = new_root
 	steps := 0
 	heap.root.add_down(branch_to_fix, &steps)

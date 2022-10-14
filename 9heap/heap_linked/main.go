@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"fmt"
+	"math/rand"
+)
 
 func main() {
 
@@ -18,8 +21,13 @@ func test_print() {
 
 	heap := Heap{&Node{5, nil, nil, 0}}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 63; i++ {
 		heap.add(i + rand.Intn(20) + 1)
+	}
+
+	for i := 0; i < 1000; i++ {
+		incr := rand.Intn(10) + 10
+		fmt.Println(64+i, " ", heap.add(incr))
 	}
 	heap.root.print_explicit_stack()
 	/*
