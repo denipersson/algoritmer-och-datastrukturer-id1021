@@ -42,6 +42,7 @@ func (n *Node) search(sequence string, path string) []string {
 			if plussed {
 				path = path[0 : len(path)-1]
 			}
+			plussed = true
 			path += string(get_char_from_code(index + 1))
 			possible = append(possible, n.next[index+1].search(next_seq, path)...)
 		}
