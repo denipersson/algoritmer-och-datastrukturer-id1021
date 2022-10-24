@@ -23,6 +23,6 @@ func main() {
 	}
 
 	fmt.Println(t9.start_search("161"))
-	fmt.Println(t9.start_search("245"))
+	fmt.Println(t9.start_search("2314"))
 
 }
