@@ -14,13 +14,11 @@ type maps struct {
 
 func new_map(file string) maps {
 	new := maps{make([]*city, 541)}
-
 	f, err := os.Open(file)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
-
 	csv_reader := csv.NewReader(f)
 	for true {
 		line, err := csv_reader.Read()
@@ -33,7 +31,6 @@ func new_map(file string) maps {
 		dist, _ := strconv.Atoi(line[2])
 		c1.add_connection(c2, dist)
 	}
-
 	return new
 }
 func (m *maps) lookup(name string) *city {
@@ -69,7 +66,6 @@ func shortest_dist(from *city, to *city, max int) *int {
 	}
 	var shortest *int
 	shortest = &max
-
 	for i := 0; i < len(from.connections); i++ {
 		c := from.connections[i]
 		dist := shortest_dist(c.connected_city, to, max-c.dist)
