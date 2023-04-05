@@ -14,7 +14,6 @@ func main() {
 		test_quick_sort(1*i, vals)
 
 	}
-
 	/*
 	   t := create_random_linked_list(10)
 	   fmt.Println(t.String())
